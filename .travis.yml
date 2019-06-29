@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t gualcm/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true gualcm/react-test npm test -- --coverage
+
+after_success:
+  # Build production images
+  - docker build -t gualcm/multi-client ./client
+  - docker build -t gualcm/multi-nginx ./nginx
+  - docker build -t gualcm/multi-server ./server
+  - docker build -t gualcm/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Push images to docker hub
+  - docker push gualcm/multi-client
+  - docker push gualcm/multi-nginx
+  - docker push gualcm/multi-server
+  - docker push gualcm/multi-worker
