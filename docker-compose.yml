@@ -36,8 +36,8 @@ services:
       - PGUSER=postgres
       - PGHOST=postgres
       - PGDATABASE=postgres
-      # Creo que esto no lo estamos usando porque no se lo pasamos a postgres
-      # - PGPASSWORD=postgres_password
+      # Creo que esto no lo estamos usando
+      # - PGPASSWORD=postgrespassword
       - PGPORT=5432
   client:
     build:
